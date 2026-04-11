@@ -1,0 +1,143 @@
+Sending build context to Docker daemon  53.17kB
+Step 1/10 : FROM gradle:8.14-jdk17 AS build
+ ---> c0fd587a7725
+Step 2/10 : WORKDIR /app
+ ---> Using cache
+ ---> 8c3fc55592d4
+Step 3/10 : COPY . .
+ ---> 1cd62912c7c4
+Step 4/10 : RUN gradle build -x test
+ ---> Running in d5567804339f
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :resolveMainClassName
+> Task :bootJar
+> Task :jar SKIPPED
+> Task :assemble
+> Task :check
+> Task :build
+
+BUILD SUCCESSFUL in 49s
+4 actionable tasks: 4 executed
+ ---> Removed intermediate container d5567804339f
+ ---> 0261c7669639
+Step 5/10 : FROM eclipse-temurin:17-jdk
+ ---> ddb0d3a56376
+Step 6/10 : WORKDIR /app
+ ---> Using cache
+ ---> 0c0426d95a80
+Step 7/10 : COPY --from=build /app/build/libs/*.jar app.jar
+ ---> 1192e6011192
+Step 8/10 : EXPOSE 8081
+ ---> Running in 65f2056ae4ff
+ ---> Removed intermediate container 65f2056ae4ff
+ ---> bbfe7106b441
+Step 9/10 : ENTRYPOINT ["java","-jar","app.jar"]
+ ---> Running in dc610bdbf18c
+ ---> Removed intermediate container dc610bdbf18c
+ ---> e76afa40109b
+Step 10/10 : LABEL com.docker.compose.image.builder=classic
+ ---> Running in 9154e6d62d9a
+ ---> Removed intermediate container 9154e6d62d9a
+ ---> 6230240a5d83
+Successfully built 6230240a5d83
+Successfully tagged guacamaya-auth:latest
+Attaching to app-1, db-1
+db-1  | The files belonging to this database system will be owned by user "postgres".
+db-1  | This user must also own the server process.
+db-1  | 
+db-1  | The database cluster will be initialized with locale "en_US.utf8".
+db-1  | The default database encoding has accordingly been set to "UTF8".
+db-1  | The default text search configuration will be set to "english".
+db-1  | 
+db-1  | Data page checksums are disabled.
+db-1  | 
+db-1  | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+db-1  | creating subdirectories ... ok
+db-1  | selecting dynamic shared memory implementation ... posix
+db-1  | selecting default max_connections ... 100
+db-1  | selecting default shared_buffers ... 128MB
+db-1  | selecting default time zone ... Etc/UTC
+db-1  | creating configuration files ... ok
+db-1  | running bootstrap script ... ok
+db-1  | performing post-bootstrap initialization ... ok
+app-1  | 
+app-1  |   .   ____          _            __ _ _
+app-1  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+app-1  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+app-1  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+app-1  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+app-1  |  =========|_|==============|___/=/_/_/_/
+app-1  | 
+app-1  |  :: Spring Boot ::                (v4.0.5)
+app-1  | 
+app-1  | 2026-04-11T21:45:13.756Z  INFO 1 --- [demo] [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 1 (/app/app.jar started by root in /app)
+app-1  | 2026-04-11T21:45:13.762Z  INFO 1 --- [demo] [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+db-1   | syncing data to disk ... ok
+db-1   | 
+db-1   | 
+db-1   | Success. You can now start the database server using:
+db-1   | 
+db-1   |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+db-1   | 
+db-1   | waiting for server to start....2026-04-11 21:45:14.085 UTC [48] LOG:  starting PostgreSQL 16.13 (Debian 16.13-1.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+db-1   | 2026-04-11 21:45:14.092 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+db-1   | 2026-04-11 21:45:14.115 UTC [51] LOG:  database system was shut down at 2026-04-11 21:45:13 UTC
+db-1   | 2026-04-11 21:45:14.127 UTC [48] LOG:  database system is ready to accept connections
+db-1   |  done
+db-1   | server started
+db-1   | CREATE DATABASE
+db-1   | 
+db-1   | 
+db-1   | /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+db-1   | 
+db-1   | waiting for server to shut down...2026-04-11 21:45:14.350 UTC [48] LOG:  received fast shutdown request
+db-1   | .2026-04-11 21:45:14.357 UTC [48] LOG:  aborting any active transactions
+db-1   | 2026-04-11 21:45:14.359 UTC [48] LOG:  background worker "logical replication launcher" (PID 54) exited with exit code 1
+db-1   | 2026-04-11 21:45:14.360 UTC [49] LOG:  shutting down
+db-1   | 2026-04-11 21:45:14.366 UTC [49] LOG:  checkpoint starting: shutdown immediate
+app-1  | 2026-04-11T21:45:14.594Z  INFO 1 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+db-1   | 2026-04-11 21:45:14.620 UTC [49] LOG:  checkpoint complete: wrote 926 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.039 s, sync=0.194 s, total=0.261 s; sync files=301, longest=0.008 s, average=0.001 s; distance=4273 kB, estimate=4273 kB; lsn=0/191F0F0, redo lsn=0/191F0F0
+app-1  | 2026-04-11T21:45:14.621Z  INFO 1 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 JPA repository interfaces.
+db-1   | 2026-04-11 21:45:14.634 UTC [48] LOG:  database system is shut down
+db-1   |  done
+db-1   | server stopped
+db-1   | 
+db-1   | PostgreSQL init process complete; ready for start up.
+db-1   | 
+app-1  | 2026-04-11T21:45:15.185Z  INFO 1 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+app-1  | 2026-04-11T21:45:15.199Z  INFO 1 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+app-1  | 2026-04-11T21:45:15.199Z  INFO 1 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+app-1  | 2026-04-11T21:45:15.224Z  INFO 1 --- [demo] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1386 ms
+app-1  | 2026-04-11T21:45:15.419Z  INFO 1 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+app-1  | 2026-04-11T21:45:15.630Z  INFO 1 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@54336976
+app-1  | 2026-04-11T21:45:15.633Z  INFO 1 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+app-1  | 2026-04-11T21:45:15.693Z  INFO 1 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+app-1  | 2026-04-11T21:45:15.785Z  INFO 1 --- [demo] [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+app-1  | 2026-04-11T21:45:16.416Z  INFO 1 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+app-1  | 2026-04-11T21:45:16.516Z  INFO 1 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+app-1  | 	Database JDBC URL [jdbc:postgresql://db:5432/guacamaya_auth]
+app-1  | 	Database driver: PostgreSQL JDBC Driver
+app-1  | 	Database dialect: PostgreSQLDialect
+app-1  | 	Database version: 16.13
+app-1  | 	Default catalog/schema: guacamaya_auth/public
+app-1  | 	Autocommit mode: undefined/unknown
+app-1  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+app-1  | 	JDBC fetch size: none
+app-1  | 	Pool: DataSourceConnectionProvider
+app-1  | 	Minimum pool size: undefined/unknown
+app-1  | 	Maximum pool size: undefined/unknown
+app-1  | 2026-04-11T21:45:16.984Z  INFO 1 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+app-1  | 2026-04-11T21:45:16.992Z  INFO 1 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+app-1  | 2026-04-11T21:45:17.042Z  WARN 1 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+app-1  | 2026-04-11T21:45:17.381Z  WARN 1 --- [demo] [           main] .s.a.UserDetailsServiceAutoConfiguration : 
+app-1  | 
+app-1  | Using generated security password: ecf4ab3f-6b31-4cb0-a9a9-b85b5662c0ea
+app-1  | 
+app-1  | This generated password is for development use only. Your security configuration must be updated before running your application in production.
+app-1  | 
+app-1  | 2026-04-11T21:45:17.422Z  INFO 1 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+app-1  | 2026-04-11T21:45:17.602Z  INFO 1 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+app-1  | 2026-04-11T21:45:17.613Z  INFO 1 --- [demo] [           main] com.example.demo.DemoApplication         : Started DemoApplication in 4.368 seconds (process running for 4.957)
