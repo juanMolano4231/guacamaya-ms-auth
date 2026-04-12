@@ -1,0 +1,142 @@
+Sending build context to Docker daemon  67.81kB
+Step 1/10 : FROM gradle:8.14-jdk17 AS build
+ ---> c0fd587a7725
+Step 2/10 : WORKDIR /app
+ ---> Using cache
+ ---> 8c3fc55592d4
+Step 3/10 : COPY . .
+ ---> Using cache
+ ---> 73a2c1535a6c
+Step 4/10 : RUN gradle build -x test
+ ---> Using cache
+ ---> dc57a204e3ce
+Step 5/10 : FROM eclipse-temurin:17-jdk
+ ---> ddb0d3a56376
+Step 6/10 : WORKDIR /app
+ ---> Using cache
+ ---> 0c0426d95a80
+Step 7/10 : COPY --from=build /app/build/libs/*.jar app.jar
+ ---> Using cache
+ ---> afd5a9ec1fc0
+Step 8/10 : EXPOSE 8081
+ ---> Using cache
+ ---> 0c5e17e6c48b
+Step 9/10 : ENTRYPOINT ["java","-jar","app.jar"]
+ ---> Using cache
+ ---> c8222a3e28ab
+Step 10/10 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> 6b98304fd5cb
+Successfully built 6b98304fd5cb
+Successfully tagged guacamaya-auth:latest
+Attaching to app-1, db-1
+db-1  | 
+db-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+db-1  | 
+app-1  | 
+app-1  |   .   ____          _            __ _ _
+app-1  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+app-1  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+app-1  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+app-1  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+app-1  |  =========|_|==============|___/=/_/_/_/
+app-1  | 
+app-1  |  :: Spring Boot ::                (v4.0.5)
+app-1  | 
+app-1  | 2026-04-12T03:14:21.158Z  INFO 1 --- [demo] [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 1 (/app/app.jar started by root in /app)
+app-1  | 2026-04-12T03:14:21.164Z  INFO 1 --- [demo] [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+app-1  | 2026-04-12T03:14:21.920Z  INFO 1 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+app-1  | 2026-04-12T03:14:21.985Z  INFO 1 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 53 ms. Found 2 JPA repository interfaces.
+app-1  | 2026-04-12T03:14:22.582Z  INFO 1 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+app-1  | 2026-04-12T03:14:22.596Z  INFO 1 --- [demo] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+app-1  | 2026-04-12T03:14:22.596Z  INFO 1 --- [demo] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.20]
+app-1  | 2026-04-12T03:14:22.627Z  INFO 1 --- [demo] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1391 ms
+app-1  | 2026-04-12T03:14:22.845Z  INFO 1 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+app-1  | 2026-04-12T03:14:22.912Z  INFO 1 --- [demo] [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.7.Final
+app-1  | 2026-04-12T03:14:23.512Z  INFO 1 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+app-1  | 2026-04-12T03:14:23.563Z  INFO 1 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+app-1  | 2026-04-12T03:14:23.780Z  INFO 1 --- [demo] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5ddd84d2
+app-1  | 2026-04-12T03:14:23.782Z  INFO 1 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+app-1  | 2026-04-12T03:14:23.876Z  INFO 1 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+app-1  | 	Database JDBC URL [jdbc:postgresql://db:5432/guacamaya_auth]
+app-1  | 	Database driver: PostgreSQL JDBC Driver
+app-1  | 	Database dialect: PostgreSQLDialect
+app-1  | 	Database version: 16.13
+app-1  | 	Default catalog/schema: guacamaya_auth/public
+app-1  | 	Autocommit mode: undefined/unknown
+app-1  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+app-1  | 	JDBC fetch size: none
+app-1  | 	Pool: DataSourceConnectionProvider
+app-1  | 	Minimum pool size: undefined/unknown
+app-1  | 	Maximum pool size: undefined/unknown
+app-1  | 2026-04-12T03:14:24.873Z  INFO 1 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+app-1  | 2026-04-12T03:14:24.929Z  INFO 1 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+app-1  | 2026-04-12T03:14:25.002Z  INFO 1 --- [demo] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+app-1  | 2026-04-12T03:14:25.218Z  WARN 1 --- [demo] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+app-1  | 2026-04-12T03:14:25.310Z  WARN 1 --- [demo] [           main] .s.a.UserDetailsServiceAutoConfiguration : 
+app-1  | 
+app-1  | Using generated security password: 50f566fa-4a9d-45e8-8288-52a318584605
+app-1  | 
+app-1  | This generated password is for development use only. Your security configuration must be updated before running your application in production.
+app-1  | 
+app-1  | 2026-04-12T03:14:25.319Z  INFO 1 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+app-1  | 2026-04-12T03:14:25.772Z  INFO 1 --- [demo] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+app-1  | 2026-04-12T03:14:25.779Z  INFO 1 --- [demo] [           main] com.example.demo.DemoApplication         : Started DemoApplication in 5.103 seconds (process running for 5.641)
+app-1  | 2026-04-12T03:16:12.986Z  INFO 1 --- [demo] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+app-1  | 2026-04-12T03:16:12.986Z  INFO 1 --- [demo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+app-1  | 2026-04-12T03:16:12.987Z  INFO 1 --- [demo] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+app-1  | 2026-04-12T03:16:12.998Z  WARN 1 --- [demo] [nio-8080-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/auth/register' (previous null). Performing CorsConfiguration lookup. This is logged once only at WARN level, and every time at TRACE.
+app-1  | 2026-04-12T03:16:13.083Z  WARN 1 --- [demo] [nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected end-of-input in VALUE_STRING]
+app-1  | 2026-04-12T03:16:21.745Z  WARN 1 --- [demo] [nio-8080-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected end-of-input in VALUE_STRING]
+app-1  | Hibernate: 
+app-1  |     select
+app-1  |         u1_0.id,
+app-1  |         u1_0.email,
+app-1  |         u1_0.password_hash,
+app-1  |         u1_0.role,
+app-1  |         u1_0.username 
+app-1  |     from
+app-1  |         users u1_0 
+app-1  |     where
+app-1  |         u1_0.username=?
+app-1  | Hibernate: 
+app-1  |     insert 
+app-1  |     into
+app-1  |         refresh_tokens
+app-1  |         (expires_at, token, user_id) 
+app-1  |     values
+app-1  |         (?, ?, ?)
+app-1  | Hibernate: 
+app-1  |     select
+app-1  |         rt1_0.id,
+app-1  |         rt1_0.expires_at,
+app-1  |         rt1_0.token,
+app-1  |         rt1_0.user_id 
+app-1  |     from
+app-1  |         refresh_tokens rt1_0 
+app-1  |     where
+app-1  |         rt1_0.token=?
+app-1  | Hibernate: 
+app-1  |     select
+app-1  |         u1_0.id,
+app-1  |         u1_0.email,
+app-1  |         u1_0.password_hash,
+app-1  |         u1_0.role,
+app-1  |         u1_0.username 
+app-1  |     from
+app-1  |         users u1_0 
+app-1  |     where
+app-1  |         u1_0.id=?
+app-1  | Hibernate: 
+app-1  |     delete 
+app-1  |     from
+app-1  |         refresh_tokens 
+app-1  |     where
+app-1  |         id=?
+app-1  | Hibernate: 
+app-1  |     insert 
+app-1  |     into
+app-1  |         refresh_tokens
+app-1  |         (expires_at, token, user_id) 
+app-1  |     values
+app-1  |         (?, ?, ?)
