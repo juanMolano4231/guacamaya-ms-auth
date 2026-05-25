@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.RefreshToken;
 import com.example.demo.entity.User;
 import com.example.demo.entity.dto.LoginRequest;
+import com.example.demo.entity.dto.MeResponse;
 import com.example.demo.entity.dto.RegisterRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.exception.AuthException;
@@ -59,6 +60,15 @@ public class AuthService {
         RefreshToken refreshToken = refreshService.create(user);
 
         setTokensInCookies(response, accessToken, refreshToken.getToken());
+    }
+
+    public MeResponse getMe(String token) {
+        Long userId = jwtService.validate(token);
+
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new AuthException("User not found"));
+
+        return new MeResponse(user.getId(), user.getUsername(), user.getRole());
     }
 
     public void refresh(String refreshToken, HttpServletResponse response) {

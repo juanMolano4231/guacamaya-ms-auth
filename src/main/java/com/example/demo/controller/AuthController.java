@@ -1,17 +1,23 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.dto.LoginRequest;
+import com.example.demo.entity.dto.MeResponse;
 import com.example.demo.entity.dto.RegisterRequest;
 import com.example.demo.service.AuthService;
 import com.example.exception.AuthException;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/auth")
@@ -43,5 +49,28 @@ public class AuthController {
         }
         service.refresh(refreshToken, response);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<MeResponse> me(HttpServletRequest request) {
+        String token = extractAccessToken(request);
+
+        if (token == null || token.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
+        }
+
+        return ResponseEntity.ok(service.getMe(token));
+    }
+
+    private String extractAccessToken(HttpServletRequest request) {
+        if (request.getCookies() == null)
+            return null;
+
+        for (var cookie : request.getCookies()) {
+            if ("accessToken".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }
